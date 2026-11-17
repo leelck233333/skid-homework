@@ -10,7 +10,6 @@ import {
 import { X, Pen, Trash2 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import FileContent from "./FileContent";
-import { Badge } from "../ui/badge";
 import { Label } from "../ui/label";
 
 export type PreviewItemProps = {
@@ -21,16 +20,9 @@ export type PreviewItemProps = {
 };
 
 function getColorClassByStatus(status: FileStatus) {
-  switch (status) {
-    case "success":
-      return "border-green-500";
-    case "failed":
-      return "border-red-500";
-    case "pending":
-      return "border-amber-500";
-    case "processing":
-      return "border-cyan-500";
-  }
+  if (status === "failed") return "border-destructive";
+  if (status === "processing") return "border-foreground";
+  return "border-border";
 }
 
 export default function PreviewItem({
@@ -58,11 +50,9 @@ export default function PreviewItem({
         <figure
           onDoubleClick={switchActiveItem}
           className={twMerge(
-            "group relative flex flex-col overflow-hidden border bg-background/80 shadow-sm transition select-none",
-            isMobile
-              ? "h-64 min-w-[72vw] rounded-2xl border-white/15"
-              : "rounded-xl border-white/10",
-            isSelected ? "bg-accent" : "",
+            "group relative flex w-full min-w-0 flex-col overflow-hidden rounded-lg border bg-card shadow-xs transition select-none",
+            isMobile ? "h-64 min-w-[72vw]" : "",
+            isSelected ? "bg-secondary" : "",
             getColorClassByStatus(item.status),
           )}
         >
@@ -70,19 +60,21 @@ export default function PreviewItem({
             <FileContent it={item} />
           </div>
 
-          <figcaption className="flex items-center justify-between px-3 py-2 text-xs text-slate-200">
-            <span className="truncate pr-2" title={item.displayName}>
+          <figcaption className="flex flex-col gap-0.5 px-3 py-2 text-xs">
+            <span className="truncate font-medium text-foreground" title={item.displayName}>
               {item.displayName}
             </span>
-            <Badge variant="outline" className="border-white/20">
+            <span className="text-muted-foreground">
+              {t(`status.${item.status}`)}
+              {" · "}
               {tCommon(`sources.${item.source}`)}
-            </Badge>
+            </span>
           </figcaption>
 
           <button
             className={twMerge(
-              "absolute right-2 top-2 rounded-full bg-black/40 p-1.5 text-white/90 backdrop-blur transition hover:bg-black/60 cursor-pointer",
-              !isMobile && "hidden group-hover:block",
+              "absolute right-2 top-2 cursor-pointer rounded-md bg-foreground/85 p-1.5 text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              !isMobile && "hidden group-hover:block group-focus-within:block",
             )}
             onClick={(e) => {
               e.stopPropagation();

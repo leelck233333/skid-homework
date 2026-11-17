@@ -71,7 +71,7 @@ export default function ActionsArea({
       <GlobalTraitsEditor
         className={cn(
           "w-full items-center justify-center",
-          isMobileLayout && "py-6 text-base",
+          isMobileLayout && "min-h-11",
         )}
       />
 
@@ -81,7 +81,7 @@ export default function ActionsArea({
           variant="destructive"
           className={cn(
             "items-center justify-center flex-1",
-            isMobileLayout && "py-6 text-base",
+            isMobileLayout && "min-h-11",
           )}
           size={isMobileLayout ? "lg" : "default"}
           disabled={itemsLength === 0 || isWorking}
@@ -97,7 +97,7 @@ export default function ActionsArea({
           ref={skidBtnRef}
           className={cn(
             "items-center justify-center gap-2 flex-1",
-            isMobileLayout && "py-6 text-base",
+            isMobileLayout && "min-h-11",
           )}
           size={isMobileLayout ? "lg" : "default"}
           disabled={itemsLength === 0 || isWorking}

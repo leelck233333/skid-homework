@@ -16,6 +16,7 @@ import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatMessages from "@/components/chat/chat-messages";
 import ChatComposer from "@/components/chat/chat-composer";
+import AppShell from "@/components/shell/AppShell";
 
 export default function ChatPage() {
   const { t } = useTranslation("commons", { keyPrefix: "chat-page" });
@@ -65,18 +66,19 @@ export default function ChatPage() {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
+      <AppShell>
+      <div className="flex min-h-0 flex-1 overflow-hidden bg-background text-foreground">
         <AnimatePresence initial={false}>
           {!sidebarCollapsed && (
             <motion.aside
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: 280, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
-              className="hidden border-r bg-muted/10 md:flex md:flex-col h-full"
+              className="hidden h-full border-r bg-secondary/40 md:flex md:flex-col"
             >
-              <div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
-                <span className="font-semibold tracking-tight">
-                  {t("title")}
+              <div className="flex h-12 shrink-0 items-center justify-between border-b px-3">
+                <span className="text-sm font-medium">
+                  {t("history.title")}
                 </span>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -132,6 +134,7 @@ export default function ChatPage() {
           />
         </div>
       </div>
+      </AppShell>
     </TooltipProvider>
   );
 }

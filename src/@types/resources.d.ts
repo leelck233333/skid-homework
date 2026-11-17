@@ -28,6 +28,7 @@ interface Resources {
       "actions": {
         "back": "Back to Scanner",
         "close-sidebar": "Close Sidebar",
+        "open-sidebar": "Open sidebar",
         "delete-chat": "Delete Chat",
         "new-chat": "New Chat",
         "open-settings": "Settings",
@@ -217,6 +218,12 @@ interface Resources {
           "title": "Rename File"
         },
         "menu-item": "Rename"
+      },
+      "status": {
+        "failed": "Failed",
+        "pending": "Pending",
+        "processing": "Processing",
+        "success": "Done"
       },
       "supported-types": "Supports images, text, Markdown, JSON, etc.",
       "tip": "Hint: double click to focus file on solution area, single click to preview in full screen",
@@ -698,6 +705,12 @@ interface Resources {
       },
       "upload": "Upload Files",
       "upload-tip": "Images and text files are supported. PDFs require an active Gemini or OpenAI (Responses API enabled) source."
+    },
+    "nav": {
+      "brand": "Skid Homework",
+      "chat": "Chat",
+      "settings": "Settings",
+      "workspace": "Workspace"
     },
     "uploads-info": {
       "selected": "Selected"

@@ -28,6 +28,12 @@
     "supported-types": "支持图片、文本、Markdown、JSON 等格式",
     "no-files": "没有文件 上传或拍照以开始",
     "title": "预览",
+    "status": {
+      "pending": "待处理",
+      "processing": "处理中",
+      "success": "完成",
+      "failed": "失败"
+    },
     "tip": "提示：双击以在解决方案区域聚焦文件，单击文件全屏预览",
     "image-alt": "作业预览",
     "file-type": {
@@ -144,6 +150,7 @@
       "delete-chat": "删除对话",
       "search": "搜索聊天...",
       "close-sidebar": "关闭侧边栏",
+      "open-sidebar": "打开侧边栏",
       "open-settings": "设置"
     },
     "source": {
@@ -702,5 +709,11 @@
       "requires-responses-api-pdf": "使用 PDF 识别功能需要开启 Responses API 设置",
       "web-search-not-supported": "模型 {{model}} 不支持联网搜索，已自动禁用该功能继续处理"
     }
+  },
+  "nav": {
+    "brand": "打滑作业",
+    "workspace": "作业",
+    "chat": "聊天",
+    "settings": "设置"
   }
 }

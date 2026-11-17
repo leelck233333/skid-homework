@@ -111,7 +111,7 @@ export default function StreamingOutputDisplay({
           <Button
             size="icon"
             variant="secondary"
-            className="absolute bottom-4 right-4 rounded-full shadow-lg opacity-90 hover:opacity-100 transition-opacity z-10 bg-primary/10 hover:bg-primary/20 backdrop-blur-sm"
+            className="absolute bottom-4 right-4 z-10 shadow-xs"
             onClick={scrollToBottom}
           >
             <ArrowDown className="h-4 w-4" />

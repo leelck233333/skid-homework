@@ -28,6 +28,12 @@
     "supported-types": "Supports images, text, Markdown, JSON, etc.",
     "no-files": "No files yet. Upload or take a photo to begin.",
     "title": "Preview",
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "success": "Done",
+      "failed": "Failed"
+    },
     "tip": "Hint: double click to focus file on solution area, single click to preview in full screen",
     "image-alt": "Homework preview",
     "file-type": {
@@ -144,6 +150,7 @@
       "delete-chat": "Delete Chat",
       "search": "Search chats...",
       "close-sidebar": "Close Sidebar",
+      "open-sidebar": "Open sidebar",
       "open-settings": "Settings"
     },
     "source": {
@@ -703,5 +710,11 @@
     "copy": {
       "success": "Copied"
     }
+  },
+  "nav": {
+    "brand": "Skid Homework",
+    "workspace": "Workspace",
+    "chat": "Chat",
+    "settings": "Settings"
   }
 }

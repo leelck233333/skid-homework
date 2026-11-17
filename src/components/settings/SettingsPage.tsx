@@ -35,6 +35,7 @@ import AISourceManager from "./AISourceManager";
 import ExplanationModeSelector from "./ExplanationModeSelector";
 import ModelSelector, { CUSTOM_MODEL_VALUE } from "../ui/model-selector";
 import { RefreshCw } from "lucide-react";
+import AppShell from "../shell/AppShell";
 
 export const DEFAULT_BASE_BY_PROVIDER: Record<AiProvider, string> = {
   gemini: DEFAULT_GEMINI_BASE_URL,
@@ -52,8 +53,8 @@ function BackButton({ href }: BackButtonProps) {
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
-      <Link href={href ?? "/"} className="w-full sm:flex-1">
-        <Button className="w-full">
+      <Link href={href ?? "/"} className="w-full sm:w-auto">
+        <Button variant="outline" className="w-full sm:w-auto">
           {t("back")} <Kbd>ESC</Kbd>
         </Button>
       </Link>
@@ -320,9 +321,11 @@ export default function SettingsPage() {
   };
 
   return (
-    <>
-      <div className="mx-auto max-w-3xl space-y-8 p-4 md:p-8">
-        <h1 className="text-2xl font-bold tracking-tight">{t("heading")}</h1>
+    <AppShell>
+      <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6 md:py-8">
+        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+          {t("heading")}
+        </h1>
 
         <BackButton href={navTargetPath} />
 
@@ -336,16 +339,15 @@ export default function SettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>{t("appearance.title")}</CardTitle>
-            <CardDescription>{t("appearance.desc")}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="theme-select">
                 {t("appearance.theme.label")}
               </Label>
               <select
                 id="theme-select"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                className="ui-select"
                 value={themePreference}
                 onChange={(event) =>
                   handleThemeSelect(event.target.value as ThemePreference)
@@ -357,9 +359,6 @@ export default function SettingsPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-muted-foreground">
-                {t("appearance.theme.desc")}
-              </p>
             </div>
 
             <div className="space-y-2">
@@ -368,7 +367,7 @@ export default function SettingsPage() {
               </Label>
               <select
                 id="language-select"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                className="ui-select"
                 value={language}
                 onChange={(event) =>
                   handleLanguageSelect(event.target.value as LanguagePreference)
@@ -380,9 +379,6 @@ export default function SettingsPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-muted-foreground">
-                {t("appearance.language.desc")}
-              </p>
             </div>
           </CardContent>
         </Card>
@@ -400,7 +396,7 @@ export default function SettingsPage() {
               >
                 <div>
                   <p className="font-medium">{item.label}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {item.description}
                   </p>
                 </div>
@@ -766,6 +762,6 @@ export default function SettingsPage() {
 
         <BackButton href={navTargetPath} />
       </div>
-    </>
+    </AppShell>
   );
 }

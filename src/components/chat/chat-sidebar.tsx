@@ -7,7 +7,6 @@ import {
   Trash2,
   GitFork,
   MoreHorizontal,
-  MessageSquare,
   Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -65,11 +64,11 @@ export default function ChatSidebar({
   );
 
   return (
-    <div className="flex h-full flex-col gap-4">
-      <div className="flex items-center justify-between px-4 py-2">
+    <div className="flex h-full flex-col">
+      <div className="px-3 py-3">
         <Button
           onClick={onNewChat}
-          className="w-full justify-start gap-2 shadow-sm"
+          className="w-full justify-start gap-2"
           variant="default"
         >
           <Plus className="h-4 w-4" />
@@ -77,7 +76,7 @@ export default function ChatSidebar({
         </Button>
       </div>
 
-      <div className="px-4 pb-2">
+      <div className="px-3 pb-3">
         <div className="relative">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -96,8 +95,7 @@ export default function ChatSidebar({
       <div className="flex-1 overflow-hidden">
         <div className="h-full overflow-y-auto px-3">
           {threads.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-8 text-center text-sm text-muted-foreground opacity-60">
-              <MessageSquare className="mb-2 h-8 w-8" />
+            <div className="px-3 py-8 text-center text-sm text-muted-foreground">
               <p>{t("history.empty")}</p>
             </div>
           ) : (
@@ -115,17 +113,18 @@ export default function ChatSidebar({
                         onCloseMobile?.();
                       }}
                       className={cn(
-                        "flex w-full flex-col items-start gap-1 rounded-md px-3 py-2 text-sm transition-all hover:bg-muted/50",
+                        "flex w-full flex-col items-start gap-0.5 rounded-md px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         isActive
-                          ? "bg-muted font-medium text-foreground"
-                          : "text-muted-foreground",
+                          ? "bg-background font-medium text-foreground"
+                          : "text-muted-foreground hover:bg-background/70 hover:text-foreground",
                       )}
                     >
                       <span className="truncate w-45 text-left">
                         {thread.title}
                       </span>
-                      <span className="text-[10px] opacity-70 truncate max-w-full">
-                        {sourceMap.get(thread.sourceId)?.name}
+                      <span className="max-w-full truncate text-xs text-muted-foreground">
+                        {sourceMap.get(thread.sourceId)?.name ??
+                          t("history.unknown-source")}
                       </span>
                     </button>
                     {isActive && (

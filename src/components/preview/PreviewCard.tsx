@@ -107,9 +107,7 @@ export default function PreviewCard({
         suppressContentEditableWarning
         // onKeyDown={preventTyping}
         className={cn(
-          "md:col-span-2 border-white/10 backdrop-blur outline-none caret-transparent cursor-default flex flex-col",
-          isMobileLayout &&
-            "border border-white/20 bg-background/70 shadow-lg backdrop-blur-lg",
+          "md:col-span-2 flex cursor-default flex-col caret-transparent outline-none focus-visible:ring-2 focus-visible:ring-ring",
         )}
       >
         <CardHeader className={cn(isMobileLayout && "px-5 pb-2 pt-5")}>
@@ -153,7 +151,7 @@ export default function PreviewCard({
 
           {isDragging && !isMobileLayout && (
             <div
-              className="flex h-64 flex-col items-center justify-center rounded-lg border border-dashed text-slate-400 border-red-500 bg-red-500/10"
+              className="flex h-40 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-destructive/50 bg-destructive/5 text-sm text-destructive"
               onDrop={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

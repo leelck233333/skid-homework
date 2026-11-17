@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Bot, User, Copy, Edit2, Check, X } from "lucide-react";
+import { Copy, Edit2, Check, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -82,58 +81,31 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
   return (
     <div className="flex-1 min-h-0 overflow-hidden relative">
       <ScrollArea ref={scrollAreaRef} className="h-full">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-8 md:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-4 py-6 md:px-6">
           {messages.length === 0 ? (
-            <div className="mt-20 flex flex-col items-center justify-center gap-4 text-center">
-              <div className="rounded-full bg-muted p-4">
-                <Bot className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <div className="max-w-md space-y-2">
-                <h2 className="text-lg font-semibold">
-                  {t("conversation.empty-title")}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Start a new conversation with{" "}
-                  <span className="font-medium text-foreground">
-                    {resolvedSource?.name}
-                  </span>
-                  .
-                </p>
-              </div>
+            <div className="flex min-h-[40vh] flex-col items-center justify-center px-4 text-center">
+              <h2 className="text-base font-medium">
+                {t("conversation.empty-title")}
+              </h2>
+              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+                {resolvedSource?.name ?? t("conversation.empty")}
+              </p>
             </div>
           ) : (
             messages.map((msg) => (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.05 }}
+              <div
                 key={msg.id}
                 className={cn(
-                  "group flex gap-4 text-sm md:text-base",
-                  msg.role === "user" ? "flex-row-reverse" : "flex-row",
+                  "group flex text-sm md:text-base",
+                  msg.role === "user" ? "justify-end" : "justify-start",
                 )}
               >
                 <div
                   className={cn(
-                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border shadow-sm",
+                    "flex min-w-0 max-w-[85%] flex-col gap-1 md:max-w-[75%]",
                     msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-background",
-                  )}
-                >
-                  {msg.role === "user" ? (
-                    <User className="h-5 w-5" />
-                  ) : (
-                    <Bot className="h-5 w-5 text-primary" />
-                  )}
-                </div>
-
-                <div
-                  className={cn(
-                    "flex min-w-0 max-w-[85%] flex-col gap-1 rounded-2xl shadow-sm md:max-w-[75%]",
-                    msg.role === "user"
-                      ? "bg-primary/5 text-foreground rounded-tr-sm"
-                      : "bg-muted/30 border border-border/50 rounded-tl-sm",
+                      ? "rounded-lg bg-secondary px-3 py-2 text-foreground"
+                      : "w-full max-w-3xl px-0 py-1",
                   )}
                 >
                   {editingId === msg.id ? (
@@ -173,7 +145,7 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
                   {!editingId && msg.id && (
                     <div
                       className={cn(
-                        "flex items-center gap-1 px-2 pb-2 opacity-0 transition-opacity group-hover:opacity-100",
+                        "flex items-center gap-1 opacity-100 sm:opacity-0 sm:transition-opacity sm:group-focus-within:opacity-100 sm:group-hover:opacity-100",
                         msg.role === "user" ? "justify-end" : "justify-start",
                       )}
                     >
@@ -209,7 +181,7 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
                     </div>
                   )}
                 </div>
-              </motion.div>
+              </div>
             ))
           )}
         </div>

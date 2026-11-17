@@ -100,18 +100,31 @@ export default function AISourceManager() {
                 <div
                   key={source.id}
                   className={cn(
-                    "flex flex-col gap-3 rounded-md border border-border p-3 md:flex-row md:items-center md:justify-between",
-                    isActive && "border-primary"
+                    "flex cursor-pointer flex-col gap-3 rounded-md border border-border p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex-row md:items-center md:justify-between",
+                    isActive && "bg-secondary"
                   )}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setActiveSource(source.id)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setActiveSource(source.id);
+                    }
+                  }}
                 >
                   <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3 select-none">
                     <div>
                       <p className="text-sm font-medium">
                         {source.name}
-                        <span className="ml-2 text-xs uppercase text-muted-foreground">
+                        <span className="ml-2 text-xs text-muted-foreground">
                           {t(`sources.providers.${source.provider}`)}
                         </span>
+                        {isActive && (
+                          <span className="ml-2 text-xs text-muted-foreground">
+                            {t("sources.active.badge")}
+                          </span>
+                        )}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {source.baseUrl ??

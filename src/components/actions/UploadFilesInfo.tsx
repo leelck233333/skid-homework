@@ -1,4 +1,3 @@
-import { Badge } from "../ui/badge";
 import { useTranslation } from "react-i18next";
 
 function bytesToReadable(size: number) {
@@ -22,16 +21,14 @@ export default function UploadFilesInfo({
 }: InfoAreaProps) {
   const { t } = useTranslation("commons", { keyPrefix: "uploads-info" });
   return (
-    <div className="flex items-center justify-between text-sm">
-      <span className="dark:text-slate-300">{t("selected")}</span>
-      <div className="flex items-center gap-2">
-        <Badge variant="secondary" className="text-white bg-slate-800/80">
-          {itemsLength}
-        </Badge>
-        <span className="text-slate-700 dark:text-slate-400">
+    <div className="flex items-baseline justify-between gap-3 text-sm">
+      <span className="text-muted-foreground">{t("selected")}</span>
+      <span className="tabular-nums text-foreground">
+        {itemsLength}
+        <span className="ml-2 text-muted-foreground">
           {bytesToReadable(totalBytes)}
         </span>
-      </div>
+      </span>
     </div>
   );
 }

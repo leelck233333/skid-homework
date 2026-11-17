@@ -108,7 +108,7 @@ export default function AddAISourceDialog({
             <Label htmlFor="new-provider">{t("sources.add.provider")}</Label>
             <select
               id="new-provider"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="ui-select"
               value={newProvider}
               onChange={(event) =>
                 setNewProvider(event.target.value as AiProvider)

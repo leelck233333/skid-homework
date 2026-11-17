@@ -24,11 +24,11 @@ export default function Explanation({
   if (mode === "explanation") {
     return (
       <div>
-        <div className="mb-1 text-sm font-medium text-black dark:text-slate-300">
+        <div className="mb-1 text-sm font-medium">
           {t("explanation")}
         </div>
 
-        <div className="rounded-lg bg-slate-300/60 dark:bg-slate-900/60 p-3">
+        <div className="rounded-lg bg-secondary p-3">
           <MemoizedMarkdown source={content ?? "<Empty Explanation>"} />
         </div>
       </div>
@@ -65,7 +65,7 @@ function StepExplanation({
       {visibleSteps?.map((step) => {
         return (
           <>
-            <Label className="text-3xl">{step.title}</Label>
+            <Label className="text-base font-medium">{step.title}</Label>
             <MemoizedMarkdown source={step.content} />
           </>
         );

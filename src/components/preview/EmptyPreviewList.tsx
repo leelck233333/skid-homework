@@ -17,28 +17,22 @@ export default function EmptyPreviewList({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-lg border text-slate-400 flex-1",
-        isMobileLayout
-          ? "h-48 border-white/20 bg-muted/30 px-6 text-center text-base"
-          : "min-h-[16rem] border-dashed",
+        "flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed text-center text-muted-foreground",
+        isMobileLayout ? "h-48 bg-secondary/40 px-6" : "min-h-64",
         isDragging && !isMobileLayout
-          ? "border-indigo-400 bg-indigo-500/10"
-          : "border-white/15",
+          ? "border-foreground/40 bg-secondary"
+          : "border-border",
       )}
     >
       <ImageIcon className="mb-2 h-6 w-6" />
-      <p className="text-sm">
-        {/* No images yet. Upload or take a photo to begin. */}
-        {t("no-files")}
-      </p>
-      <p className="text-sm">
-        {/* You can drag your files to this panel. */}
+      <p className="text-sm text-foreground">{t("no-files")}</p>
+      <p className="mt-1 max-w-xs text-sm">
         {isMobileLayout
           ? t("drag-tip-mobile", { defaultValue: t("drag-tip") })
           : t("drag-tip")}
       </p>
       {!isMobileLayout && (
-        <p className="mt-2 text-xs text-slate-500">{t("supported-types")}</p>
+        <p className="mt-3 text-xs">{t("supported-types")}</p>
       )}
     </div>
   );

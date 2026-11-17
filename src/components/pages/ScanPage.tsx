@@ -1,7 +1,6 @@
 "use client";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
-import { Info, StarIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAiStore } from "@/store/ai-store";
 import ActionsCard from "../actions/ActionsCard";
@@ -20,14 +19,12 @@ import {
 import SolutionsArea from "../solutions/SolutionsArea";
 import { useSettingsStore } from "@/store/settings-store";
 import { processImage } from "@/utils/image-post-processing";
-import { Button } from "../ui/button";
 import { useTranslation } from "react-i18next";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useShortcut } from "@/hooks/use-shortcut";
 import OpenCVLoader from "../OpenCVLoader";
+import AppShell from "../shell/AppShell";
 import { getEnabledToolCallingPrompts } from "@/ai/prompts/prompt-manager";
 import { useStoreInitialization } from "@/hooks/use-store-initialization";
 import { isTextMimeType } from "@/utils/file-utils";
@@ -35,7 +32,6 @@ import { isNonRetryableError } from "@/ai/errors";
 
 export default function ScanPage() {
   const { t } = useTranslation("commons", { keyPrefix: "scan-page" });
-  const router = useRouter();
   // Destructure all necessary state and new semantic actions from the store.
   const {
     imageItems: items,
@@ -93,15 +89,6 @@ export default function ScanPage() {
   const [activeTab, setActiveTab] = useState<"capture" | "preview">(
     items.length ? "preview" : "capture"
   );
-  useShortcut(
-    "openChat",
-    (event) => {
-      event.preventDefault();
-      router.push("/chat");
-    },
-    [router]
-  );
-
   useEffect(() => {
     if (!items.length) {
       setActiveTab("capture");
@@ -534,75 +521,43 @@ ${traits}
 
   if (!isStoreReady) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <p className="text-muted-foreground animate-pulse">
-          {/* Loading */}
-          {t("loading")}
-        </p>
-      </div>
+      <AppShell>
+        <div className="flex flex-1 items-center justify-center px-4 py-24">
+          <p className="text-sm text-muted-foreground">{t("loading")}</p>
+        </div>
+      </AppShell>
     );
   }
 
   return (
-    <>
+    <AppShell>
       {imageEnhancement && <OpenCVLoader />}
 
-      <div className={cn("min-h-screen", isMobile && "pb-24")}>
+      <div className={cn(isMobile && "pb-8")}>
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-          <header
-            className={cn(
-              "mb-6 flex items-center justify-between gap-4",
-              isMobile && "flex-col items-start"
-            )}
-          >
-            <div className="flex w-full flex-col gap-2">
-              <h1
-                className={cn(
-                  "text-3xl font-semibold tracking-tight",
-                  isMobile && "text-2xl leading-tight"
-                )}
-              >
-                {t("title")}
-              </h1>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
-                <Info className="h-4 w-4 shrink-0" />
-                <span>{t("tip")}</span>
-              </div>
-            </div>
-
-            <Button
-              className={cn(
-                "gap-2 whitespace-nowrap",
-                isMobile ? "w-full justify-center rounded-full py-3" : "px-4"
-              )}
-              size={isMobile ? "lg" : "default"}
-              variant="secondary"
-              asChild
-            >
-              <a
-                href="https://github.com/cubewhy/skid-homework/discussions"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <StarIcon className="h-4 w-4" />
-                {t("discussions-btn")}
-              </a>
-            </Button>
+          <header className="mb-6">
+            <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+              {t("title")}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">{t("tip")}</p>
           </header>
 
-          {isMobile && (
-            <div className="mb-6 w-full rounded-2xl border border-white/15 bg-background/70 p-4 shadow-sm backdrop-blur">
-              <p className="text-base font-medium">
-                {items.length
-                  ? t("mobile.status", { count: items.length })
-                  : t("mobile.empty")}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {allowPdfUploads
-                  ? t("mobile.hint-ready")
-                  : t("mobile.hint-pdf")}
-              </p>
-            </div>
+          {isMobile && (items.length > 0 || !allowPdfUploads) && (
+            <p className="mb-4 text-sm text-foreground">
+              {items.length > 0
+                ? t("mobile.status", { count: items.length })
+                : null}
+              {!allowPdfUploads && (
+                <span
+                  className={cn(
+                    "text-muted-foreground",
+                    items.length > 0 && "mt-1 block",
+                  )}
+                >
+                  {t("mobile.hint-pdf")}
+                </span>
+              )}
+            </p>
           )}
 
           {isMobile ? (
@@ -671,27 +626,30 @@ ${traits}
             <SolutionsArea />
           </section>
 
-          <footer
-            className={cn(
-              "mt-10 flex items-center justify-between text-sm text-muted-foreground",
-              isMobile && "mt-12 flex-col items-start gap-3 text-base"
-            )}
-          >
+          <footer className="mt-10 text-sm text-muted-foreground">
             <p>
               {t("footer.license")} {t("footer.slogan")}{" "}
               <a
-                className="underline"
+                className="text-foreground underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 href="https://github.com/cubewhy/skid-homework"
                 target="_blank"
                 rel="noreferrer"
               >
-                {/* {t("footer.source")} */}
                 https://github.com/cubewhy/skid-homework
+              </a>
+              {" · "}
+              <a
+                className="text-foreground underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                href="https://github.com/cubewhy/skid-homework/discussions"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("discussions-btn")}
               </a>
             </p>
           </footer>
         </div>
       </div>
-    </>
+    </AppShell>
   );
 }

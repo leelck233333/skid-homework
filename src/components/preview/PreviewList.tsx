@@ -74,13 +74,13 @@ export default function PreviewList({
             className={cn(
               "rounded-lg flex-1 border p-4",
               isDragging
-                ? "border-indigo-400 bg-indigo-500/10"
-                : "border-white/15",
+                ? "border-foreground/40 bg-secondary"
+                : "border-border",
             )}
           >
             <div
               className={cn(
-                "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 content-start",
+                "grid w-full grid-cols-2 content-start gap-4 md:grid-cols-3",
               )}
             >
               {renderItems()}

@@ -1,7 +1,6 @@
 "use client";
 
 import type { FileItem } from "@/store/problems-store";
-import { useCallback } from "react";
 import ActionsArea from "./ActionsArea";
 import UploadFilesInfo from "./UploadFilesInfo";
 import { Button } from "../ui/button";
@@ -11,7 +10,6 @@ import UploadArea from "./UploadArea";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { useShortcut } from "@/hooks/use-shortcut";
 import { ShortcutHint } from "../ShortcutHint";
 import { useSettingsStore } from "@/store/settings-store";
 import OnlineSearchToggle from "@/components/actions/OnlineSearchToggle.tsx";
@@ -50,46 +48,13 @@ export default function ActionsCard({
     showOnlineSearchInScanner,
     onlineSearchEnabled,
     setOnlineSearchEnabled,
+    keybindings,
   } = useSettingsStore((s) => s);
 
-  const handleSettingsBtnClick = useCallback(() => {
-    router.push("/settings");
-  }, [router]);
-
-  const handleChatBtnClick = useCallback(() => {
-    router.push("/chat");
-  }, [router]);
-
-  const settingsShortcut = useShortcut(
-    "openSettings",
-    () => handleSettingsBtnClick(),
-    [handleSettingsBtnClick]
-  );
-
-  const chatShortcut = useShortcut("openChat", () => handleChatBtnClick(), [
-    handleChatBtnClick,
-  ]);
-
   return (
-    <Card
-      className={cn(
-        "md:col-span-1 border-white/10 backdrop-blur",
-        layout === "mobile" &&
-        "border border-white/20 bg-background/70 shadow-lg backdrop-blur-lg",
-        className
-      )}
-    >
-      <CardHeader
-        className={cn(layout === "mobile" ? "px-5 pb-2 pt-5" : undefined)}
-      >
-        <CardTitle
-          className={cn(
-            "text-base",
-            layout === "mobile" && "text-lg font-semibold"
-          )}
-        >
-          {t("title")}
-        </CardTitle>
+    <Card className={cn("md:col-span-1", className)}>
+      <CardHeader>
+        <CardTitle className="text-base">{t("title")}</CardTitle>
       </CardHeader>
       <CardContent
         className={cn("space-y-4", layout === "mobile" && "px-5 pb-5 pt-1")}
@@ -130,31 +95,22 @@ export default function ActionsCard({
           </div>
         )}
 
-        <div
-          className={cn(
-            "flex gap-2 flex-wrap",
-            layout === "mobile" && "flex-col"
-          )}
-        >
+        <div className={cn("flex gap-2", layout === "mobile" && "flex-col")}>
           <Button
-            className={cn("flex-1", layout === "mobile" && "py-6 text-base")}
-            size={layout === "mobile" ? "lg" : "default"}
-            variant="secondary"
-            onClick={handleSettingsBtnClick}
+            className="min-h-11 flex-1"
+            variant="outline"
+            onClick={() => router.push("/settings")}
           >
             {t("settings")}
-            {layout !== "mobile" && (
-              <ShortcutHint shortcut={settingsShortcut} />
-            )}
+            <ShortcutHint shortcut={keybindings.openSettings} />
           </Button>
           <Button
-            className={cn("flex-1", layout === "mobile" && "py-6 text-base")}
-            size={layout === "mobile" ? "lg" : "default"}
-            variant="secondary"
-            onClick={handleChatBtnClick}
+            className="min-h-11 flex-1"
+            variant="outline"
+            onClick={() => router.push("/chat")}
           >
             {t("chat")}
-            {layout !== "mobile" && <ShortcutHint shortcut={chatShortcut} />}
+            <ShortcutHint shortcut={keybindings.openChat} />
           </Button>
         </div>
       </CardContent>

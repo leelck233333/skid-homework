@@ -207,12 +207,12 @@ export default function SolutionViewer({
         onKeyDown={onKeyDown}
         {...props}
       >
-        <div className="rounded-xl border border-slate-700 p-4">
-          <div className="mb-2 text-xs uppercase tracking-wide text-slate-400">
+        <div className="rounded-lg border p-4">
+          <div className="mb-2 text-xs text-muted-foreground">
             {t("progress.prefix")}{" "}
-            <label className="font-extrabold text-amber-500">
+            <span className="font-medium text-foreground">
               {selectedProblem + 1}
-            </label>{" "}
+            </span>{" "}
             {t("progress.suffix", {
               total: entry.solutions.problems.length,
             })}
@@ -228,10 +228,10 @@ export default function SolutionViewer({
 
           <div className="mt-4 space-y-4">
             <div>
-              <div className="mb-1 text-sm font-medium text-black dark:text-slate-300">
+              <div className="mb-1 text-sm font-medium">
                 {t("answer")}
               </div>
-              <div className="rounded-lg bg-slate-300/60 dark:bg-slate-900/60 p-3">
+              <div className="rounded-lg bg-secondary p-3">
                 <MemoizedMarkdown source={activeProblem?.answer ?? ""} />
               </div>
               <div className="mt-2">
@@ -254,10 +254,10 @@ export default function SolutionViewer({
 
             {activeProblem?.onlineSearch !== undefined && (
               <div>
-                <div className="mb-1 text-sm font-medium text-slate-300">
+                <div className="mb-1 text-sm font-medium">
                   {t("online-search.title")}
                 </div>
-                <div className="rounded-lg bg-slate-900/60 p-3 text-sm">
+                <div className="rounded-lg bg-secondary p-3 text-sm">
                   <MemoizedMarkdown
                     source={
                       activeProblem.onlineSearch ||

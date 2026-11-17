@@ -121,7 +121,7 @@ export default function SolutionsArea() {
   };
 
   return (
-    <Card className="rounded-2xl shadow" onKeyDown={handleGlobalKeyDown}>
+    <Card onKeyDown={handleGlobalKeyDown}>
       <CardHeader className="px-6 pb-0">
         <CardTitle className="text-lg font-semibold">{t("title")}</CardTitle>
         <CardAction>

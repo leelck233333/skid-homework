@@ -221,7 +221,7 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
         <Button
           className={cn(
             "flex-1 items-center justify-between",
-            isCompact && "py-6 text-base font-medium",
+            isCompact && "min-h-11",
           )}
           size={isCompact ? "lg" : "default"}
           ref={uploadBtnRef}
@@ -262,7 +262,7 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
               variant="secondary"
               className={cn(
                 "flex-1 items-center justify-between min-w-0 shrink",
-                isCompact && "py-6 text-base font-medium mt-2",
+                isCompact && "min-h-11",
               )}
               size={isCompact ? "lg" : "default"}
               disabled={isWorking}

@@ -13,7 +13,6 @@ import {
 import type { AiSource } from "@/store/ai-store";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Badge } from "../ui/badge";
 import {
   Sheet,
   SheetContent,
@@ -67,7 +66,7 @@ export default function ChatHeader({
   const { t } = useTranslation("commons", { keyPrefix: "chat-page" });
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 bg-background/80 backdrop-blur-sm z-10">
+    <header className="z-10 flex h-12 shrink-0 items-center gap-2 border-b bg-background px-3">
       <div className="flex items-center gap-2">
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetTrigger asChild>
@@ -76,8 +75,8 @@ export default function ChatHeader({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-75 p-0">
-            <SheetHeader className="px-4 py-3 border-b text-left">
-              <SheetTitle>Chat Menu</SheetTitle>
+            <SheetHeader className="border-b px-4 py-3 text-left">
+              <SheetTitle>{t("history.title")}</SheetTitle>
             </SheetHeader>
             {renderSidebar(true)}
           </SheetContent>
@@ -95,7 +94,7 @@ export default function ChatHeader({
                 <PanelLeftOpen className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Open Sidebar</TooltipContent>
+            <TooltipContent>{t("actions.open-sidebar")}</TooltipContent>
           </Tooltip>
         )}
       </div>
@@ -105,18 +104,15 @@ export default function ChatHeader({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 gap-2 font-normal text-muted-foreground hover:text-foreground"
+            className="h-8 gap-2 px-2 font-normal text-muted-foreground hover:text-foreground"
           >
             <span className="font-medium text-foreground">
-              {resolvedSource?.name || "Select Model"}
+              {resolvedSource?.name || t("source.select.placeholder")}
             </span>
             {activeThread?.model && (
-              <Badge
-                variant="secondary"
-                className="text-[10px] font-normal h-5 px-1.5"
-              >
+              <span className="max-w-40 truncate text-muted-foreground">
                 {activeThread.model}
-              </Badge>
+              </span>
             )}
             <ChevronsUpDown className="h-3 w-3 opacity-50" />
           </Button>
@@ -126,7 +122,7 @@ export default function ChatHeader({
             <CommandInput placeholder={t("source.search")} />
             <CommandList>
               <CommandEmpty>{t("source.empty")}</CommandEmpty>
-              <CommandGroup heading="Providers">
+              <CommandGroup heading={t("source.section")}>
                 {availableSources.map((source) => (
                   <CommandItem
                     key={source.id}
@@ -143,15 +139,19 @@ export default function ChatHeader({
                 ))}
               </CommandGroup>
             </CommandList>
-            <div className="p-2 border-t bg-muted/30">
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">
-                Override Model Name
+            <div className="border-t bg-background p-3">
+              <label
+                htmlFor="chat-model-name"
+                className="mb-1.5 block text-xs font-medium text-foreground"
+              >
+                {t("source.model")}
               </label>
               <Input
+                id="chat-model-name"
                 value={modelInput}
                 onChange={(e) => setModelInput(e.target.value)}
-                className="h-8 text-xs"
-                placeholder="e.g. gpt-4-turbo"
+                className="h-9 text-sm"
+                placeholder={t("source.model-placeholder")}
                 onBlur={() => {
                   if (activeThread && modelInput !== activeThread.model) {
                     onUpdateModel(activeThread.id, modelInput);

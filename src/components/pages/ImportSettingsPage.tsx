@@ -124,7 +124,7 @@ export default function ImportSettingsPage() {
   // View 1: Error State
   if (errorKey) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
+      <div className="flex min-h-dvh items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md border-destructive/50">
           <CardHeader>
             <CardTitle className="text-destructive flex items-center gap-2">
@@ -158,12 +158,10 @@ export default function ImportSettingsPage() {
   // View 3: Success State (After clicking Yes)
   if (isImported) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
-        <Card className="w-full max-w-md text-center py-10">
-          <CardContent className="flex flex-col items-center gap-4">
-            <div className="h-16 w-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
-              <CheckCircle2 className="h-8 w-8" />
-            </div>
+      <div className="flex min-h-dvh items-center justify-center bg-background p-4">
+        <Card className="w-full max-w-md py-8 text-center">
+          <CardContent className="flex flex-col items-center gap-3">
+            <CheckCircle2 className="h-5 w-5 text-foreground" />
             <h2 className="text-2xl font-semibold tracking-tight">
               {t("success.title")}
             </h2>
@@ -206,7 +204,7 @@ export default function ImportSettingsPage() {
 
   // View 4: Confirmation State (Default)
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-muted/40">
+    <div className="flex min-h-dvh items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{t("confirm.title")}</CardTitle>
@@ -215,7 +213,7 @@ export default function ImportSettingsPage() {
 
         <CardContent>
           {modelJson && (
-            <div className="grid gap-4 rounded-md border p-4 bg-card/50">
+            <div className="grid gap-3 rounded-md border bg-secondary/40 p-4">
               <div className="grid grid-cols-[100px_1fr] items-center gap-1">
                 <span className="text-sm font-medium text-muted-foreground">
                   {t("confirm.fields.name")}
