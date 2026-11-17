@@ -22,10 +22,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     if (language && i18n.language !== language) {
       i18n.changeLanguage(language);
     }
+    if (language) {
+      document.documentElement.lang = language === "zh" ? "zh" : "en";
+    }
   }, [language]);
 
   return (
-    <ThemeProvider defaultTheme="system" storageKey="theme">
+    <ThemeProvider defaultTheme="light" storageKey="theme">
       <div className="safe-area">{children}</div>
       <Toaster />
     </ThemeProvider>

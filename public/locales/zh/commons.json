@@ -7,15 +7,15 @@
     }
   },
   "actions": {
-    "clear-all": "清空所有文件",
-    "clear-confirmation": "再点击一次",
+    "clear-all": "清空",
+    "clear-confirmation": "确认清空",
     "processing": "处理中...",
-    "scan": "开始打滑",
+    "scan": "开始识别",
     "chat": "聊天",
     "settings": "设置",
     "title": "添加作业",
     "global-traits": {
-      "trigger": "全局提示词编辑器",
+      "trigger": "提示词",
       "title": "编辑全局提示词",
       "desc": "自定义提示词将被拼接到最终的AI查询中",
       "placeholder": "你是一个聪明的AI助手, 为作业求解而设计",
@@ -26,7 +26,7 @@
     "drag-tip": "你可以把文件拖动到这个窗口中, 或者粘贴屏幕截图",
     "drag-tip-mobile": "轻触卡片即可放大，左右滑动快速浏览。",
     "supported-types": "支持图片、文本、Markdown、JSON 等格式",
-    "no-files": "没有文件 上传或拍照以开始",
+    "no-files": "没有文件",
     "title": "预览",
     "status": {
       "pending": "待处理",
@@ -151,7 +151,12 @@
       "search": "搜索聊天...",
       "close-sidebar": "关闭侧边栏",
       "open-sidebar": "打开侧边栏",
-      "open-settings": "设置"
+      "open-settings": "设置",
+      "fork": "分叉",
+      "cancel": "取消",
+      "save": "保存",
+      "copy": "复制",
+      "edit": "编辑"
     },
     "source": {
       "section": "模型",
@@ -165,13 +170,13 @@
     },
     "history": {
       "title": "历史记录",
-      "empty": "还没有聊天记录，先开始一个对话吧。",
+      "empty": "没有记录",
       "unknown-source": "未知来源",
       "untitled": "新对话"
     },
     "conversation": {
-      "empty-title": "未选择对话",
-      "empty": "选择一个对话或新建一个对话开始聊天。"
+      "empty-title": "新对话",
+      "empty": "新对话"
     },
     "composer": {
       "placeholder": "输入问题或粘贴题目...",
@@ -189,7 +194,7 @@
   },
   "solutions": {
     "analyzing": "正在分析... 正在从你的文件中提取问题和解决方案",
-    "idle": "点击\"开始打滑\"将文件发送给AI以在这里查看结果",
+    "idle": "尚无解答",
     "title": "解决方案",
     "gesture-hint": "左右滑动切换题目。",
     "status": {
@@ -432,6 +437,7 @@
       }
     },
     "model": {
+      "more": "更多选项",
       "title": "模型配置",
       "desc": "选择或手动填写请求所使用的模型。",
       "sel": {
@@ -501,6 +507,7 @@
         "placeholder": "https://example.com/v1",
         "helper": "留空将使用 {{provider}} 的默认地址。"
       },
+      "devtools": "开发者工具",
       "image-post-processing": {
         "title": "图像后处理",
         "enhancement": "开启二值化"
@@ -536,7 +543,7 @@
     },
     "form": {
       "key-placeholder": "{{provider}} API 密钥",
-      "submit": "帮我省时间！",
+      "submit": "进入",
       "advanced": {
         "title": "高级选项",
         "base-url-label": "API 基础地址（可选）",

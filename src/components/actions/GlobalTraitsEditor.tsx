@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { TextInputDialog } from "../dialogs/TextInputDialog";
 import { cn } from "@/lib/utils";
 import { useShortcut } from "@/hooks/use-shortcut";
-import { ShortcutHint } from "../ShortcutHint";
 
 export type GlobalTraitsEditorProps = {} & ComponentProps<"button">;
 
@@ -19,7 +18,7 @@ export default function GlobalTraitsEditor({
   const { traits, setTraits } = useSettingsStore((s) => s);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const triggerShortcut = useShortcut(
+  useShortcut(
     "openGlobalTraitsEditor",
     (event) => {
       event.preventDefault();
@@ -36,11 +35,11 @@ export default function GlobalTraitsEditor({
       initialValue={traits}
       trigger={
         <Button
-          variant={traits ? "outline" : "secondary"}
+          variant="outline"
           className={cn("w-full", className)}
           {...props}
         >
-          {t("trigger")} <ShortcutHint shortcut={triggerShortcut} />
+          {t("trigger")}
         </Button>
       }
       title={t("title")}

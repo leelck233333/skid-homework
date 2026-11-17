@@ -12,8 +12,8 @@ if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources,
     supportedLngs: ["en", "zh"],
-    lng: "en",
-    fallbackLng: "en",
+    lng: "zh",
+    fallbackLng: ["zh", "en"],
     ns: ["commons"],
     defaultNS: "commons",
     debug: false,

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -126,7 +125,6 @@ export default function AIAPICredentialsManager({
     <Card>
       <CardHeader>
         <CardTitle>{t("api-credentials.title")}</CardTitle>
-        <CardDescription>{t("api-credentials.desc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
@@ -180,11 +178,6 @@ export default function AIAPICredentialsManager({
               {t("reset")}
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {t("advanced.custom-base-url.helper", {
-              provider: activeSource?.name ?? "",
-            })}
-          </p>
         </div>
 
         {activeSource?.provider === "openai" && (

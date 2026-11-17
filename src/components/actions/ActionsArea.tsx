@@ -5,7 +5,6 @@ import { useProblemsStore } from "@/store/problems-store";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useShortcut } from "@/hooks/use-shortcut";
-import { ShortcutHint } from "../ShortcutHint";
 import GlobalTraitsEditor from "./GlobalTraitsEditor";
 
 export type ActionsAreaProps = {
@@ -54,13 +53,13 @@ export default function ActionsArea({
     };
   }, [confirmedClear, setConfirmedClear]);
 
-  const scanShortcut = useShortcut(
+  useShortcut(
     "startScan",
     () => skidBtnRef.current?.click(),
     [],
   );
 
-  const clearShortcut = useShortcut(
+  useShortcut(
     "clearAll",
     () => clearAllBtnRef.current?.click(),
     [confirmedClear],
@@ -75,44 +74,35 @@ export default function ActionsArea({
         )}
       />
 
-      <div className="flex flex-row flex-wrap gap-2">
-        <Button
-          ref={clearAllBtnRef}
-          variant="destructive"
-          className={cn(
-            "items-center justify-center flex-1",
-            isMobileLayout && "min-h-11",
-          )}
-          size={isMobileLayout ? "lg" : "default"}
-          disabled={itemsLength === 0 || isWorking}
-          onClick={handleClearAll}
-        >
-          <span className="flex items-center gap-2">
-            <Trash2 className="h-5 w-5 shrink-0" />
-            {!confirmedClear ? t("clear-all") : t("clear-confirmation")}
-          </span>
-          {!isMobileLayout && <ShortcutHint shortcut={clearShortcut} />}
-        </Button>
+      <div className="flex flex-col gap-1">
         <Button
           ref={skidBtnRef}
-          className={cn(
-            "items-center justify-center gap-2 flex-1",
-            isMobileLayout && "min-h-11",
-          )}
+          className={cn("w-full", isMobileLayout && "min-h-11")}
           size={isMobileLayout ? "lg" : "default"}
           disabled={itemsLength === 0 || isWorking}
           onClick={handleSkidBtnClicked}
         >
           {isWorking ? (
             <>
-              <Loader2Icon className="h-5 w-5 animate-spin" /> {t("processing")}
+              <Loader2Icon className="h-4 w-4 animate-spin" /> {t("processing")}
             </>
           ) : (
-            <>
-              {t("scan")}
-              {!isMobileLayout && <ShortcutHint shortcut={scanShortcut} />}
-            </>
+            t("scan")
           )}
+        </Button>
+        <Button
+          ref={clearAllBtnRef}
+          variant="ghost"
+          className={cn(
+            "w-full text-muted-foreground",
+            confirmedClear && "text-destructive hover:text-destructive",
+            itemsLength === 0 && "invisible",
+          )}
+          disabled={itemsLength === 0 || isWorking}
+          onClick={handleClearAll}
+        >
+          <Trash2 className="h-4 w-4" />
+          {!confirmedClear ? t("clear-all") : t("clear-confirmation")}
         </Button>
       </div>
     </div>

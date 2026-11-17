@@ -27,8 +27,13 @@ interface Resources {
     "chat-page": {
       "actions": {
         "back": "Back to Scanner",
+        "cancel": "Cancel",
         "close-sidebar": "Close Sidebar",
+        "copy": "Copy",
+        "edit": "Edit",
+        "fork": "Fork",
         "open-sidebar": "Open sidebar",
+        "save": "Save",
         "delete-chat": "Delete Chat",
         "new-chat": "New Chat",
         "open-settings": "Settings",
@@ -326,6 +331,7 @@ interface Resources {
           "title": "Custom API base URL"
         },
         "desc": "Extras that affect uploads and the interface.",
+        "devtools": "Developer tools",
         "explanation": {
           "mode": {
             "everything": "Show everything to me",
@@ -403,6 +409,7 @@ interface Resources {
       "heading": "SkidHomework Settings",
       "model": {
         "desc": "Choose or type the model name used for requests.",
+        "more": "More options",
         "fallback": {
           "desc": "Automatically switch to this model when the primary model fails",
           "label": "When selected model is unavailable, fall back to",

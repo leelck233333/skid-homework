@@ -16,7 +16,6 @@ import { Trans, useTranslation } from "react-i18next";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useShortcut } from "@/hooks/use-shortcut";
-import { ShortcutHint } from "../ShortcutHint";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -170,17 +169,17 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
     }
   }, [adbBusy, adbConnected, appendFiles, isWorking, t]);
 
-  const uploadShortcut = useShortcut("upload", () => handleUploadBtnClicked(), [
+  useShortcut("upload", () => handleUploadBtnClicked(), [
     handleUploadBtnClicked,
   ]);
 
-  const adbScreenshotShortcut = useShortcut(
+  useShortcut(
     "adbScreenshot",
     () => handleAdbBtnClicked(),
     [handleAdbBtnClicked],
   );
 
-  const textInputShortcut = useShortcut(
+  useShortcut(
     "textInput",
     () => {
       if (isWorking || adbBusy) return;
@@ -195,17 +194,10 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
 
   return (
     <>
-      <div className="space-y-2">
-        <p className="text-sm text-muted-foreground md:text-xs">
-          {t("upload-tip")}
-        </p>
-        {!allowPdf && (
-          <p className="text-xs text-muted-foreground/80">
-            {t("pdf-disabled")}
-          </p>
-        )}
-      </div>
-      <div className={cn("flex gap-2", isCompact && "flex-col")}>
+      {!allowPdf && (
+        <p className="text-xs text-muted-foreground">{t("pdf-disabled")}</p>
+      )}
+      <div className="flex flex-col gap-2">
         <input
           ref={uploadInputRef}
           type="file"
@@ -219,23 +211,15 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
           }}
         />
         <Button
-          className={cn(
-            "flex-1 items-center justify-between",
-            isCompact && "min-h-11",
-          )}
+          className={cn("w-full", isCompact && "min-h-11")}
           size={isCompact ? "lg" : "default"}
           ref={uploadBtnRef}
           disabled={isWorking || adbBusy}
           onClick={handleUploadBtnClicked}
         >
-          <span className="flex items-center gap-2">
-            <Upload className="h-5 w-5" />
-            {t("upload")}
-          </span>
-          <ShortcutHint shortcut={uploadShortcut} />
+          <Upload className="h-4 w-4" />
+          {t("upload")}
         </Button>
-      </div>
-      <div className={cn("flex gap-2 w-full", isCompact && "flex-col")}>
         <input
           ref={cameraInputRef}
           disabled={isWorking || adbBusy}
@@ -259,20 +243,14 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
           onSubmit={handleTextInput}
           trigger={
             <Button
-              variant="secondary"
-              className={cn(
-                "flex-1 items-center justify-between min-w-0 shrink",
-                isCompact && "min-h-11",
-              )}
+              variant="outline"
+              className={cn("w-full", isCompact && "min-h-11")}
               size={isCompact ? "lg" : "default"}
               disabled={isWorking}
               onClick={() => setTextInputOpen(true)}
             >
-              <span className="flex items-center gap-2 min-w-0 overflow-hidden">
-                <FileText className="h-5 w-5 shrink-0" />
-                <span className="truncate">{t("text-input.button")}</span>
-              </span>
-              <ShortcutHint shortcut={textInputShortcut} />
+              <FileText className="h-4 w-4 shrink-0" />
+              {t("text-input.button")}
             </Button>
           }
         />
@@ -281,7 +259,7 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            className="flex-1 items-center min-w-0 justify-between"
+            className="w-full justify-center"
             size="default"
             disabled={isWorking || adbBusy}
             onClick={handleAdbBtnClicked}
@@ -305,7 +283,6 @@ export default function UploadArea({ appendFiles, allowPdf }: UploadAreaProps) {
                     : t("adb.connect")}
               </span>
             </span>
-            <ShortcutHint shortcut={adbScreenshotShortcut} />
           </Button>
           {adbConnected && (
             <DropdownMenu>

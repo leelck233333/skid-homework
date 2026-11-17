@@ -3,14 +3,11 @@
 import type { FileItem } from "@/store/problems-store";
 import ActionsArea from "./ActionsArea";
 import UploadFilesInfo from "./UploadFilesInfo";
-import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Separator } from "../ui/separator";
 import UploadArea from "./UploadArea";
-import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { ShortcutHint } from "../ShortcutHint";
 import { useSettingsStore } from "@/store/settings-store";
 import OnlineSearchToggle from "@/components/actions/OnlineSearchToggle.tsx";
 import ModelSelectorPopover from "./ModelSelectorPopover";
@@ -41,14 +38,12 @@ export default function ActionsCard({
 }: ActionsCardProps) {
   const { t } = useTranslation("commons", { keyPrefix: "actions" });
   const { t: tCommon } = useTranslation("commons");
-  const router = useRouter();
 
   const {
     showModelSelectorInScanner,
     showOnlineSearchInScanner,
     onlineSearchEnabled,
     setOnlineSearchEnabled,
-    keybindings,
   } = useSettingsStore((s) => s);
 
   return (
@@ -94,25 +89,6 @@ export default function ActionsCard({
             />
           </div>
         )}
-
-        <div className={cn("flex gap-2", layout === "mobile" && "flex-col")}>
-          <Button
-            className="min-h-11 flex-1"
-            variant="outline"
-            onClick={() => router.push("/settings")}
-          >
-            {t("settings")}
-            <ShortcutHint shortcut={keybindings.openSettings} />
-          </Button>
-          <Button
-            className="min-h-11 flex-1"
-            variant="outline"
-            onClick={() => router.push("/chat")}
-          >
-            {t("chat")}
-            <ShortcutHint shortcut={keybindings.openChat} />
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );

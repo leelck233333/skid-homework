@@ -67,18 +67,19 @@ export default function InitPage() {
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <header className="mx-auto flex h-14 w-full max-w-lg items-center px-4">
-        <span className="text-sm font-semibold tracking-tight">
-          {tNav("nav.brand")}
-        </span>
+      <header className="border-b bg-card">
+        <div className="mx-auto flex h-14 w-full max-w-lg items-center px-4">
+          <span className="text-sm font-semibold tracking-tight">
+            {tNav("nav.brand")}
+          </span>
+        </div>
       </header>
 
-      <main className="mx-auto w-full max-w-lg px-4 pb-16">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {t("headline.highlight")}
-        </h1>
-
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+      <main className="mx-auto w-full max-w-lg px-4 py-10">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 rounded-lg border bg-card p-5 shadow-xs"
+        >
           <div className="space-y-2">
             <Label htmlFor="provider">{t("form.provider.label")}</Label>
             <select

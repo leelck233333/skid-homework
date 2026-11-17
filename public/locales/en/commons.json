@@ -151,7 +151,12 @@
       "search": "Search chats...",
       "close-sidebar": "Close Sidebar",
       "open-sidebar": "Open sidebar",
-      "open-settings": "Settings"
+      "open-settings": "Settings",
+      "fork": "Fork",
+      "cancel": "Cancel",
+      "save": "Save",
+      "copy": "Copy",
+      "edit": "Edit"
     },
     "source": {
       "section": "Model",
@@ -432,6 +437,7 @@
       }
     },
     "model": {
+      "more": "More options",
       "title": "Model Configuration",
       "desc": "Choose or type the model name used for requests.",
       "sel": {
@@ -501,6 +507,7 @@
         "placeholder": "https://example.com/v1",
         "helper": "Leave blank to use the default endpoint for {{provider}}."
       },
+      "devtools": "Developer tools",
       "image-post-processing": {
         "title": "Image Post-processing",
         "enhancement": "Enable Image Enhancement"
@@ -536,7 +543,7 @@
     },
     "form": {
       "key-placeholder": "{{provider}} API Key",
-      "submit": "Get My Time Back!",
+      "submit": "Continue",
       "advanced": {
         "title": "Advanced",
         "base-url-label": "API Base URL (optional)",

@@ -535,13 +535,6 @@ ${traits}
 
       <div className={cn(isMobile && "pb-8")}>
         <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-          <header className="mb-6">
-            <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-              {t("title")}
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">{t("tip")}</p>
-          </header>
-
           {isMobile && (items.length > 0 || !allowPdfUploads) && (
             <p className="mb-4 text-sm text-foreground">
               {items.length > 0
@@ -626,7 +619,8 @@ ${traits}
             <SolutionsArea />
           </section>
 
-          <footer className="mt-10 text-sm text-muted-foreground">
+          <footer className="mt-10 space-y-2 text-sm text-muted-foreground">
+            <p>{t("tip")}</p>
             <p>
               {t("footer.license")} {t("footer.slogan")}{" "}
               <a

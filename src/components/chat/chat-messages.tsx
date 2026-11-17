@@ -19,7 +19,7 @@ export type ChatMessagesProps = {
   resolvedSource: AiSource | null;
 }
 
-export default function ChatMessages({ messages, resolvedSource }: ChatMessagesProps) {
+export default function ChatMessages({ messages }: ChatMessagesProps) {
   const { t } = useTranslation("commons", { keyPrefix: "chat-page" });
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const updateMessage = useChatStore((state) => state.updateMessage);
@@ -83,14 +83,9 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
       <ScrollArea ref={scrollAreaRef} className="h-full">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-4 py-6 md:px-6">
           {messages.length === 0 ? (
-            <div className="flex min-h-[40vh] flex-col items-center justify-center px-4 text-center">
-              <h2 className="text-base font-medium">
-                {t("conversation.empty-title")}
-              </h2>
-              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-                {resolvedSource?.name ?? t("conversation.empty")}
-              </p>
-            </div>
+            <p className="px-1 py-2 text-sm text-muted-foreground">
+              {t("conversation.empty-title")}
+            </p>
           ) : (
             messages.map((msg) => (
               <div
@@ -122,14 +117,14 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
                           onClick={handleEditCancel}
                         >
                           <X className="mr-1 h-3 w-3" />
-                          Cancel
+                          {t("actions.cancel")}
                         </Button>
                         <Button
                           size="sm"
                           onClick={() => handleEditSave(msg.chatId, msg.id!)}
                         >
                           <Check className="mr-1 h-3 w-3" />
-                          Save
+                          {t("actions.save")}
                         </Button>
                       </div>
                     </div>
@@ -154,7 +149,7 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
                         size="icon"
                         className="h-6 w-6 text-muted-foreground hover:text-foreground"
                         onClick={() => handleCopy(msg.content)}
-                        title="Copy"
+                        title={t("actions.copy")}
                       >
                         <Copy className="h-3.5 w-3.5" />
                       </Button>
@@ -163,7 +158,7 @@ export default function ChatMessages({ messages, resolvedSource }: ChatMessagesP
                         size="icon"
                         className="h-6 w-6 text-muted-foreground hover:text-foreground"
                         onClick={() => handleEditStart(msg.id!, msg.content)}
-                        title="Edit"
+                        title={t("actions.edit")}
                       >
                         <Edit2 className="h-3.5 w-3.5" />
                       </Button>

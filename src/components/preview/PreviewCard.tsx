@@ -3,7 +3,6 @@ import { Trash2 } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -120,10 +119,6 @@ export default function PreviewCard({
             {/* Preview */}
             {t("title")}
           </CardTitle>
-          <CardDescription>
-            {/* Hint: double click to focus image on solution area */}
-            {t("tip")}
-          </CardDescription>
         </CardHeader>
         <CardContent
           className={cn(

@@ -28,7 +28,7 @@ const DEFAULT_SHORTCUTS: ShortcutMap = {
   openGlobalTraitsEditor: "ctrl+o",
 };
 
-const DEFAULT_LANGUAGE: LanguagePreference = "en";
+const DEFAULT_LANGUAGE: LanguagePreference = "zh";
 
 export interface SettingsState {
   imageEnhancement: boolean;
@@ -71,7 +71,7 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       imageEnhancement: false,
-      theme: "system",
+      theme: "light",
       language: DEFAULT_LANGUAGE,
       languageInitialized: false,
       keybindings: { ...DEFAULT_SHORTCUTS },
@@ -95,12 +95,9 @@ export const useSettingsStore = create<SettingsState>()(
           if (state.languageInitialized) {
             return state;
           }
-          const prefersZh =
-            typeof navigator !== "undefined" &&
-            navigator.language.toLowerCase().startsWith("zh");
           return {
             languageInitialized: true,
-            language: prefersZh ? "zh" : "en",
+            language: "zh",
           };
         }),
       setKeybinding: (action, binding) =>

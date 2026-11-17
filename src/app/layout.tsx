@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f6f9",
+  themeColor: "#f4f8fc",
   width: "device-width",
   initialScale: 1,
 };
@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh" suppressHydrationWarning>
       <body suppressHydrationWarning>
         <SerwistProvider
           swUrl="/sw.js"

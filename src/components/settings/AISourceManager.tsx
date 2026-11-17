@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -76,13 +75,9 @@ export default function AISourceManager() {
       <Card>
         <CardHeader>
           <CardTitle>{t("sources.title")}</CardTitle>
-          <CardDescription>{t("sources.desc")}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="text-sm text-muted-foreground">
-              {t("sources.active.label")}
-            </div>
+        <CardContent className="space-y-3">
+          <div className="flex flex-wrap items-center justify-end gap-3">
             <Button
               variant="secondary"
               size="sm"
@@ -101,7 +96,7 @@ export default function AISourceManager() {
                   key={source.id}
                   className={cn(
                     "flex cursor-pointer flex-col gap-3 rounded-md border border-border p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:flex-row md:items-center md:justify-between",
-                    isActive && "bg-secondary"
+                    isActive && "border-primary bg-accent"
                   )}
                   role="button"
                   tabIndex={0}
@@ -120,11 +115,6 @@ export default function AISourceManager() {
                         <span className="ml-2 text-xs text-muted-foreground">
                           {t(`sources.providers.${source.provider}`)}
                         </span>
-                        {isActive && (
-                          <span className="ml-2 text-xs text-muted-foreground">
-                            {t("sources.active.badge")}
-                          </span>
-                        )}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {source.baseUrl ??

@@ -37,7 +37,7 @@ export default function ChatComposer({
   }, [input]);
 
   return (
-    <div className="shrink-0 border-t bg-background px-4 py-3">
+    <div className="mt-auto shrink-0 border-t bg-card px-4 py-3">
       <div className="mx-auto flex w-full max-w-3xl items-end gap-2">
         <Textarea
           ref={textareaRef}

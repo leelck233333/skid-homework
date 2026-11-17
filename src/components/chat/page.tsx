@@ -67,14 +67,14 @@ export default function ChatPage() {
   return (
     <TooltipProvider delayDuration={0}>
       <AppShell>
-      <div className="flex min-h-0 flex-1 overflow-hidden bg-background text-foreground">
+      <div className="flex h-[calc(100dvh-3.5rem)] overflow-hidden bg-card text-foreground">
         <AnimatePresence initial={false}>
           {!sidebarCollapsed && (
             <motion.aside
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: 280, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
-              className="hidden h-full border-r bg-secondary/40 md:flex md:flex-col"
+              className="hidden h-full border-r bg-card md:flex md:flex-col"
             >
               <div className="flex h-12 shrink-0 items-center justify-between border-b px-3">
                 <span className="text-sm font-medium">
@@ -101,7 +101,7 @@ export default function ChatPage() {
           )}
         </AnimatePresence>
 
-        <div className="flex flex-1 flex-col h-full min-w-0 bg-background">
+        <div className="flex h-full min-w-0 flex-1 flex-col bg-card">
           <ChatHeader
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}

@@ -22,7 +22,7 @@ import { useAvailableModels } from "@/hooks/use-available-models";
 import ShortcutRecorder from "./ShortcutRecorder";
 import { useTheme } from "../theme-provider";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Kbd } from "../ui/kbd";
@@ -36,6 +36,12 @@ import ExplanationModeSelector from "./ExplanationModeSelector";
 import ModelSelector, { CUSTOM_MODEL_VALUE } from "../ui/model-selector";
 import { RefreshCw } from "lucide-react";
 import AppShell from "../shell/AppShell";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 export const DEFAULT_BASE_BY_PROVIDER: Record<AiProvider, string> = {
   gemini: DEFAULT_GEMINI_BASE_URL,
@@ -53,10 +59,11 @@ function BackButton({ href }: BackButtonProps) {
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
-      <Link href={href ?? "/"} className="w-full sm:w-auto">
-        <Button variant="outline" className="w-full sm:w-auto">
-          {t("back")} <Kbd>ESC</Kbd>
-        </Button>
+      <Link
+        href={href ?? "/"}
+        className="inline-flex h-8 items-center gap-2 rounded-md px-1 text-sm text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {t("back")} <Kbd>ESC</Kbd>
       </Link>
     </div>
   );
@@ -282,7 +289,6 @@ export default function SettingsPage() {
   }, [translateSettings, isCompact]);
 
   const shortcutsTitle = translateSettings("shortcuts.title");
-  const shortcutsDesc = translateSettings("shortcuts.desc");
   const shortcutsResetLabel = translateSettings("shortcuts.reset");
 
   const handleModelChange = (model: string) => {
@@ -322,11 +328,7 @@ export default function SettingsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6 md:py-8">
-        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          {t("heading")}
-        </h1>
-
+      <div className="mx-auto w-full max-w-3xl space-y-5 px-4 py-6 sm:px-6 md:py-8">
         <BackButton href={navTargetPath} />
 
         <AISourceManager />
@@ -385,48 +387,10 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{shortcutsTitle}</CardTitle>
-            <CardDescription>{shortcutsDesc}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {shortcutItems.map((item) => (
-              <div
-                key={item.action}
-                className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div>
-                  <p className="font-medium">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-                <ShortcutRecorder
-                  value={keybindings[item.action] ?? ""}
-                  onChange={(combo) => setKeybinding(item.action, combo)}
-                  isRecording={recordingAction === item.action}
-                  onRecordingChange={(state) => {
-                    if (!state) {
-                      setRecordingAction(null);
-                    } else {
-                      setRecordingAction(item.action);
-                    }
-                  }}
-                />
-              </div>
-            ))}
-            <Button variant="ghost" onClick={resetKeybindings} className="mt-2">
-              {shortcutsResetLabel}
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
             <CardTitle>{t("model.title")}</CardTitle>
-            <CardDescription>{t("model.desc")}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between gap-2 flex-wrap">
+          <CardContent>
+            <div className="flex items-center gap-2">
               <ModelSelector
                 sourceModelsMap={sourceModelsMap}
                 value={currentModel}
@@ -435,14 +399,14 @@ export default function SettingsPage() {
                 onOpenChangeAction={setModelPopoverOpen}
                 allowCustom={true}
                 isCustomSelected={isCustomModel}
-                className="flex-2"
+                className="min-w-0 flex-1"
               />
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => void forceRefetch()}
                 disabled={modelsLoading}
-                title={t("model.refresh")}
+                aria-label={t("model.refresh")}
               >
                 <RefreshCw
                   className={`h-4 w-4 ${modelsLoading ? "animate-spin" : ""}`}
@@ -450,50 +414,77 @@ export default function SettingsPage() {
               </Button>
             </div>
             {isCustomModel && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Select
-                    value={customModelSourceId}
-                    onValueChange={(value) => {
-                      setCustomModelSourceId(value);
-                    }}
-                  >
-                    <SelectTrigger className="w-45">
-                      <SelectValue
-                        placeholder={t("model.manual.select-provider")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {enabledSources.map((source) => (
-                        <SelectItem key={source.id} value={source.id}>
-                          {source.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    id="model-manual"
-                    className="flex-1"
-                    value={customModelName}
-                    onChange={(event) => {
-                      setCustomModelName(event.target.value);
-                    }}
-                    onBlur={() => {
-                      // Only apply custom model when user finishes editing
-                      if (customModelSourceId && customModelName.trim()) {
-                        setActiveSource(customModelSourceId);
-                        setCurrentModel(customModelName.trim());
-                      }
-                    }}
-                    placeholder={t("model.manual.placeholder")}
-                  />
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t("model.manual.desc")}
-                </p>
+              <div className="mt-3 flex items-center gap-2">
+                <Select
+                  value={customModelSourceId}
+                  onValueChange={(value) => {
+                    setCustomModelSourceId(value);
+                  }}
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder={t("model.manual.select-provider")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {enabledSources.map((source) => (
+                      <SelectItem key={source.id} value={source.id}>
+                        {source.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  id="model-manual"
+                  className="flex-1"
+                  value={customModelName}
+                  onChange={(event) => {
+                    setCustomModelName(event.target.value);
+                  }}
+                  onBlur={() => {
+                    if (customModelSourceId && customModelName.trim()) {
+                      setActiveSource(customModelSourceId);
+                      setCurrentModel(customModelName.trim());
+                    }
+                  }}
+                  placeholder={t("model.manual.placeholder")}
+                />
               </div>
             )}
-            <div className="space-y-2">
+          </CardContent>
+        </Card>
+
+        <Accordion type="multiple" className="rounded-lg border bg-card px-4">
+          <AccordionItem value="shortcuts">
+            <AccordionTrigger className="hover:no-underline">
+              {shortcutsTitle}
+            </AccordionTrigger>
+            <AccordionContent className="space-y-3">
+              {shortcutItems.map((item) => (
+                <div
+                  key={item.action}
+                  className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <p className="text-sm">{item.label}</p>
+                  <ShortcutRecorder
+                    value={keybindings[item.action] ?? ""}
+                    onChange={(combo) => setKeybinding(item.action, combo)}
+                    isRecording={recordingAction === item.action}
+                    onRecordingChange={(state) => {
+                      setRecordingAction(state ? item.action : null);
+                    }}
+                  />
+                </div>
+              ))}
+              <Button variant="ghost" onClick={resetKeybindings}>
+                {shortcutsResetLabel}
+              </Button>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="model-options">
+            <AccordionTrigger className="hover:no-underline">
+              {t("model.more")}
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="show-model-selector"
@@ -506,150 +497,134 @@ export default function SettingsPage() {
                   {t("model.show-selector-in-scanner")}
                 </Label>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="max-retries">
-                {t("model.max-retries.label")}
-              </Label>
-              <div className="flex items-center gap-2">
-                <div className="flex-1">
-                  <Slider
-                    value={[activeSource?.maxRetries ?? 5]}
-                    onValueChange={(value) => {
-                      if (!activeSource) return;
-                      updateSource(activeSource.id, { maxRetries: value[0] });
-                    }}
-                    min={0}
-                    max={10}
-                    step={1}
-                  />
-                </div>
-                <Input
-                  id="max-retries"
-                  className="w-16"
-                  type="number"
-                  min={0}
-                  max={10}
-                  value={activeSource?.maxRetries ?? 5}
-                  onChange={(event) => {
-                    if (!activeSource) return;
-                    const val = parseInt(event.target.value, 10);
-                    updateSource(activeSource.id, {
-                      maxRetries: isNaN(val)
-                        ? 5
-                        : Math.max(0, Math.min(10, val))
-                    });
-                  }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {t("model.max-retries.tip")}
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label>{t("model.fallback.label")}</Label>
-              <ModelSelector
-                sourceModelsMap={sourceModelsMap}
-                value={fallbackModel}
-                onChangeAction={handleFallbackChange}
-                open={fallbackPopoverOpen}
-                onOpenChangeAction={setFallbackPopoverOpen}
-                allowNone={true}
-                noneLabel={t("model.fallback.none")}
-                allowCustom={true}
-                isCustomSelected={isCustomFallback}
-                excludeModel={currentModel}
-                className="w-full"
-              />
-              {isCustomFallback && (
-                <div className="flex items-center gap-2 mt-2">
-                  <Select
-                    value={customFallbackSourceId}
-                    onValueChange={(value) => {
-                      setCustomFallbackSourceId(value);
-                    }}
-                  >
-                    <SelectTrigger className="w-45">
-                      <SelectValue
-                        placeholder={t("model.manual.select-provider")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {enabledSources.map((source) => (
-                        <SelectItem key={source.id} value={source.id}>
-                          {source.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    className="flex-1"
-                    value={customFallbackName}
-                    onChange={(event) => {
-                      setCustomFallbackName(event.target.value);
-                    }}
-                    onBlur={() => {
-                      // Only apply custom fallback model when user finishes editing
-                      if (customFallbackSourceId && customFallbackName.trim()) {
-                        setFallbackModel(customFallbackName.trim());
-                      }
-                    }}
-                    placeholder={t("model.manual.placeholder")}
-                  />
-                </div>
-              )}
-              <p className="text-xs text-muted-foreground">
-                {t("model.fallback.desc")}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("thinking.title")}</CardTitle>
-            <CardDescription>{t("thinking.desc")}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {activeSource?.provider === "gemini" && (
               <div className="space-y-2">
-                <Label>{t("thinking.budget")}</Label>
+                <Label htmlFor="max-retries">{t("model.max-retries.label")}</Label>
                 <div className="flex items-center gap-2">
                   <div className="flex-1">
                     <Slider
-                      value={[localThinkingBudget]}
-                      onValueChange={(value) =>
-                        handleThinkingBudgetChange(value[0])
-                      }
-                      min={128}
-                      max={24576}
+                      value={[activeSource?.maxRetries ?? 5]}
+                      onValueChange={(value) => {
+                        if (!activeSource) return;
+                        updateSource(activeSource.id, { maxRetries: value[0] });
+                      }}
+                      min={0}
+                      max={10}
                       step={1}
                     />
                   </div>
                   <Input
-                    className="w-24"
-                    value={localThinkingBudget}
+                    id="max-retries"
+                    className="w-16"
                     type="number"
-                    min={128}
-                    max={24576}
-                    onChange={(event) =>
-                      handleThinkingBudgetChange(
-                        Math.max(
-                          128,
-                          Math.min(24576, Number(event.target.value) || 128)
-                        )
-                      )
-                    }
+                    min={0}
+                    max={10}
+                    value={activeSource?.maxRetries ?? 5}
+                    onChange={(event) => {
+                      if (!activeSource) return;
+                      const val = parseInt(event.target.value, 10);
+                      updateSource(activeSource.id, {
+                        maxRetries: isNaN(val)
+                          ? 5
+                          : Math.max(0, Math.min(10, val)),
+                      });
+                    }}
                   />
-                  <span>{t("thinking.tokens-unit")}</span>
                 </div>
               </div>
-            )}
+              <div className="space-y-2">
+                <Label>{t("model.fallback.label")}</Label>
+                <ModelSelector
+                  sourceModelsMap={sourceModelsMap}
+                  value={fallbackModel}
+                  onChangeAction={handleFallbackChange}
+                  open={fallbackPopoverOpen}
+                  onOpenChangeAction={setFallbackPopoverOpen}
+                  allowNone={true}
+                  noneLabel={t("model.fallback.none")}
+                  allowCustom={true}
+                  isCustomSelected={isCustomFallback}
+                  excludeModel={currentModel}
+                  className="w-full"
+                />
+                {isCustomFallback && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <Select
+                      value={customFallbackSourceId}
+                      onValueChange={(value) => {
+                        setCustomFallbackSourceId(value);
+                      }}
+                    >
+                      <SelectTrigger className="w-40">
+                        <SelectValue
+                          placeholder={t("model.manual.select-provider")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {enabledSources.map((source) => (
+                          <SelectItem key={source.id} value={source.id}>
+                            {source.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      className="flex-1"
+                      value={customFallbackName}
+                      onChange={(event) => {
+                        setCustomFallbackName(event.target.value);
+                      }}
+                      onBlur={() => {
+                        if (customFallbackSourceId && customFallbackName.trim()) {
+                          setFallbackModel(customFallbackName.trim());
+                        }
+                      }}
+                      placeholder={t("model.manual.placeholder")}
+                    />
+                  </div>
+                )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
-            <div className="space-y-2">
-              <Label htmlFor="online-search-toggle">
-                {t("thinking.online-search.title")}
-              </Label>
+          <AccordionItem value="thinking">
+            <AccordionTrigger className="hover:no-underline">
+              {t("thinking.title")}
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              {activeSource?.provider === "gemini" && (
+                <div className="space-y-2">
+                  <Label>{t("thinking.budget")}</Label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1">
+                      <Slider
+                        value={[localThinkingBudget]}
+                        onValueChange={(value) =>
+                          handleThinkingBudgetChange(value[0])
+                        }
+                        min={128}
+                        max={24576}
+                        step={1}
+                      />
+                    </div>
+                    <Input
+                      className="w-24"
+                      value={localThinkingBudget}
+                      type="number"
+                      min={128}
+                      max={24576}
+                      onChange={(event) =>
+                        handleThinkingBudgetChange(
+                          Math.max(
+                            128,
+                            Math.min(24576, Number(event.target.value) || 128),
+                          ),
+                        )
+                      }
+                    />
+                    <span>{t("thinking.tokens-unit")}</span>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="online-search-toggle"
@@ -658,18 +633,10 @@ export default function SettingsPage() {
                     setOnlineSearchEnabled(state === true)
                   }
                 />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">
-                    {t("thinking.online-search.toggle.settings")}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {t("thinking.online-search.desc")}
-                  </p>
-                </div>
+                <Label htmlFor="online-search-toggle">
+                  {t("thinking.online-search.toggle.settings")}
+                </Label>
               </div>
-            </div>
-
-            <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <Checkbox
                   id="show-online-search-scanner"
@@ -682,85 +649,73 @@ export default function SettingsPage() {
                   {t("thinking.online-search.show-toggle-in-scanner")}
                 </Label>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="traits-input">{t("traits.title")}</Label>
-              <div className="relative">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="traits-input">{t("traits.title")}</Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearTraits}
+                    disabled={!localTraits}
+                  >
+                    {t("clear-input")}
+                  </Button>
+                </div>
                 <Textarea
                   id="traits-input"
-                  className="min-h-25 pr-20"
+                  className="min-h-24"
                   value={localTraits}
                   onChange={(event) => handleTraitsChange(event.target.value)}
                   placeholder={t("traits.placeholder")}
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-2"
-                  onClick={clearTraits}
-                  disabled={!localTraits}
-                >
-                  {t("clear-input")}
-                </Button>
               </div>
-              <p className="text-sm text-muted-foreground">
-                {t("traits.desc")}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+            </AccordionContent>
+          </AccordionItem>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("advanced.title")}</CardTitle>
-            <CardDescription>{t("advanced.desc")}</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <Checkbox
-                id="image-enhancement"
-                checked={imageEnhancement}
-                onCheckedChange={(state) =>
-                  setImageEnhancement(state as boolean)
-                }
-              />
-              <Label htmlFor="image-enhancement">
-                {t("advanced.image-post-processing.enhancement")}
-              </Label>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Checkbox
-                id="devtools-enabled"
-                checked={devtoolsEnabled}
-                onCheckedChange={(state) => setDevtoolsState(Boolean(state))}
-              />
-              <Label htmlFor="devtools-enabled">Enable Devtools</Label>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Checkbox
-                id="clear-dialog-on-submit"
-                checked={clearDialogOnSubmit}
-                onCheckedChange={(state) =>
-                  setClearDialogOnSubmit(state === true)
-                }
-              />
-              <Label htmlFor="clear-dialog-on-submit">
-                {t("advanced.ui.clear-dialog-on-submit")}
-              </Label>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Label>{t("advanced.explanation.title")}</Label>
-
-              <ExplanationModeSelector />
-            </div>
-          </CardContent>
-        </Card>
-
-        <BackButton href={navTargetPath} />
+          <AccordionItem value="advanced">
+            <AccordionTrigger className="hover:no-underline">
+              {t("advanced.title")}
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="image-enhancement"
+                  checked={imageEnhancement}
+                  onCheckedChange={(state) =>
+                    setImageEnhancement(state as boolean)
+                  }
+                />
+                <Label htmlFor="image-enhancement">
+                  {t("advanced.image-post-processing.enhancement")}
+                </Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="devtools-enabled"
+                  checked={devtoolsEnabled}
+                  onCheckedChange={(state) => setDevtoolsState(Boolean(state))}
+                />
+                <Label htmlFor="devtools-enabled">{t("advanced.devtools")}</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  id="clear-dialog-on-submit"
+                  checked={clearDialogOnSubmit}
+                  onCheckedChange={(state) =>
+                    setClearDialogOnSubmit(state === true)
+                  }
+                />
+                <Label htmlFor="clear-dialog-on-submit">
+                  {t("advanced.ui.clear-dialog-on-submit")}
+                </Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Label>{t("advanced.explanation.title")}</Label>
+                <ExplanationModeSelector />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </AppShell>
   );

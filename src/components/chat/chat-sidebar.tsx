@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
 import {
   Plus,
   Trash2,
@@ -115,8 +114,8 @@ export default function ChatSidebar({
                       className={cn(
                         "flex w-full flex-col items-start gap-0.5 rounded-md px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         isActive
-                          ? "bg-background font-medium text-foreground"
-                          : "text-muted-foreground hover:bg-background/70 hover:text-foreground",
+                          ? "bg-accent font-medium text-primary"
+                          : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
                       )}
                     >
                       <span className="truncate w-45 text-left">
@@ -143,13 +142,13 @@ export default function ChatSidebar({
                             <DropdownMenuItem
                               onClick={() => onForkChat(thread.id)}
                             >
-                              <GitFork className="mr-2 h-4 w-4" /> Fork
+                              <GitFork className="mr-2 h-4 w-4" /> {t("actions.fork")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => onDeleteChat(thread.id)}
                               className="text-destructive"
                             >
-                              <Trash2 className="mr-2 h-4 w-4" /> Delete
+                              <Trash2 className="mr-2 h-4 w-4" /> {t("actions.delete-chat")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -163,18 +162,6 @@ export default function ChatSidebar({
         </div>
       </div>
 
-      <div className="border-t p-3">
-        <Link href="/" passHref>
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-2"
-            size="sm"
-          >
-            {t("actions.back")}
-            <Kbd>ESC</Kbd>
-          </Button>
-        </Link>
-      </div>
     </div>
   );
 }
