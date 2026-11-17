@@ -14,13 +14,14 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { DEFAULT_OPENAI_BASE_URL } from "@/store/ai-store";
+import { DEFAULT_DEEPSEEK_BASE_URL, DEFAULT_OPENAI_BASE_URL } from "@/store/ai-store";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 const PRESET_URLS: Record<string, string> = {
   openai: DEFAULT_OPENAI_BASE_URL,
+  deepseek: DEFAULT_DEEPSEEK_BASE_URL,
   openrouter: "https://openrouter.ai/api/v1"
 };
 
@@ -81,7 +82,9 @@ export default function OpenAIAdvancedOptions({
                 const presetUrl = PRESET_URLS[val];
                 if (presetUrl) {
                   setApiAddress(presetUrl);
-                  if (val === "openrouter") {
+                  if (val === "deepseek") {
+                    toast.success("已切换到 DeepSeek");
+                  } else if (val === "openrouter") {
                     toast.success(
                       t("api-credentials.advanced.switched-openrouter")
                     );
@@ -104,6 +107,7 @@ export default function OpenAIAdvancedOptions({
                 <SelectItem value="openai">
                   {t("api-credentials.advanced.openai-default")}
                 </SelectItem>
+                <SelectItem value="deepseek">DeepSeek</SelectItem>
                 <SelectItem value="openrouter">
                   {t("api-credentials.advanced.openrouter")}
                 </SelectItem>
