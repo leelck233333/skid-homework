@@ -71,6 +71,7 @@ export const DEFAULT_GEMINI_BASE_URL =
   "https://generativelanguage.googleapis.com";
 export const DEFAULT_OPENAI_MODEL = "gpt-4.1-mini";
 export const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
+export const DEFAULT_DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1";
 
 function loadLegacyGemini(): {
   source: Partial<AiSource>;
@@ -106,7 +107,6 @@ function loadLegacyGemini(): {
   }
 }
 
-// Memoize legacy config to avoid duplicate localStorage reads during initialization
 const legacyGeminiConfig = loadLegacyGemini();
 
 function createDefaultSources(): AiSource[] {
@@ -131,6 +131,17 @@ function createDefaultSources(): AiSource[] {
       thinkingBudget: undefined,
       useResponsesApi: true,
       enabled: false,
+    },
+    {
+      id: "deepseek-default",
+      name: "DeepSeek",
+      provider: "openai",
+      apiKey: null,
+      baseUrl: DEFAULT_DEEPSEEK_BASE_URL,
+      traits: undefined,
+      thinkingBudget: undefined,
+      useResponsesApi: false,
+      enabled: true,
     },
   ];
 }
@@ -345,25 +356,21 @@ export const useAiStore = create<AiStore>()(
         customFallbackName: state.customFallbackName,
         customFallbackSourceId: state.customFallbackSourceId,
       }),
-      version: 5,
+      version: 6,
       migrate: (persistedState, version) => {
         const data =
           persistedState && typeof persistedState === "object"
             ? { ...(persistedState as Record<string, unknown>) }
             : {};
         if (version < 3) {
-          // Migrate model from active source to global currentModel
           const sources = data.sources as AiSource[] | undefined;
           const activeSourceId = data.activeSourceId as string | undefined;
           const activeSource = sources?.find((s) => s.id === activeSourceId);
-          // Use legacy model from source or default
           data.currentModel =
             (activeSource as Record<string, unknown> | undefined)?.model ??
             DEFAULT_GEMINI_MODEL;
-          // Remove model from all sources
           if (sources) {
             data.sources = sources.map((s) => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { model: _removed, ...rest } = s as AiSource & {
                 model?: string;
               };
@@ -372,13 +379,29 @@ export const useAiStore = create<AiStore>()(
           }
         }
         if (version < 4) {
-          // Clear old fallbackSourceId (it had different semantics)
           delete data.fallbackSourceId;
           data.fallbackModel = null;
         }
         if (version < 5) {
-          // Initialize fallbackSourceId for cross-provider fallback support
           data.fallbackSourceId = null;
+        }
+        if (version < 6) {
+          const sources = (data.sources as AiSource[]) ?? [];
+          const hasDeepseek = sources.some((s) => s.id === "deepseek-default");
+          if (!hasDeepseek) {
+            data.sources = [
+              ...sources,
+              {
+                id: "deepseek-default",
+                name: "DeepSeek",
+                provider: "openai",
+                apiKey: null,
+                baseUrl: DEFAULT_DEEPSEEK_BASE_URL,
+                useResponsesApi: false,
+                enabled: true,
+              },
+            ];
+          }
         }
         return data;
       },
