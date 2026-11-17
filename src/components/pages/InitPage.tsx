@@ -6,16 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
+  DEFAULT_DEEPSEEK_BASE_URL,
   DEFAULT_GEMINI_BASE_URL,
   DEFAULT_OPENAI_BASE_URL,
   useAiStore,
 } from "@/store/ai-store";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
 import { Label } from "../ui/label";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -59,6 +54,16 @@ export default function InitPage() {
     const from = searchParams.get("from");
     const to = from && from !== "/init" ? from : "/";
     router.replace(to);
+  };
+
+  const applyPreset = (url: string, name?: string) => {
+    setBaseUrl(url);
+    if (activeSource) {
+      updateSource(activeSource.id, {
+        baseUrl: url,
+        ...(name ? { name } : {}),
+      });
+    }
   };
 
   return (
@@ -141,7 +146,6 @@ export default function InitPage() {
               </li>
             </motion.ul>
 
-            {/* Main form for API key submission */}
             <motion.form
               onSubmit={handleSubmit}
               initial={{ opacity: 0, y: 12 }}
@@ -182,38 +186,51 @@ export default function InitPage() {
                 </Button>
               </div>
 
-              {/* START: Advanced settings section, collapsible */}
-              <Accordion type="single" collapsible className="w-full max-w-md">
-                <AccordionItem value="advanced-settings" className="border-b-0">
-                  <AccordionTrigger className="text-sm hover:no-underline">
-                    {t("form.advanced.title")}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-2 mx-1">
-                      {/* Input for custom API Base URL */}
-                      <Label htmlFor="base-url" className="text-xs">
-                        {t("form.advanced.base-url-label")}
-                      </Label>
-                      <Input
-                        id="base-url"
-                        type="url"
-                        placeholder={t("form.advanced.base-url-placeholder", {
-                          provider: activeSource?.name ?? "",
-                        })}
-                        value={baseUrl ?? ""}
-                        onChange={(e) => setBaseUrl(e.target.value)}
-                        className="placeholder:text-slate-500 focus-visible:ring-indigo-500"
-                      />
-                      <p className="text-xs text-slate-400">
-                        {t("form.advanced.base-url-helper", {
-                          provider: activeSource?.name ?? "",
-                        })}
-                      </p>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              {/* END: Advanced settings section */}
+              {/* Base URL always visible for custom / DeepSeek / relays */}
+              <div className="w-full max-w-md space-y-2">
+                <Label htmlFor="base-url" className="text-xs">
+                  API Base URL（支持 DeepSeek / 中转站）
+                </Label>
+                <Input
+                  id="base-url"
+                  type="url"
+                  placeholder="https://api.deepseek.com/v1 或中转站地址"
+                  value={baseUrl ?? ""}
+                  onChange={(e) => setBaseUrl(e.target.value)}
+                  className="placeholder:text-slate-500 focus-visible:ring-indigo-500"
+                />
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      applyPreset(DEFAULT_DEEPSEEK_BASE_URL, "DeepSeek")
+                    }
+                  >
+                    DeepSeek
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyPreset(DEFAULT_OPENAI_BASE_URL)}
+                  >
+                    OpenAI
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => applyPreset("https://openrouter.ai/api/v1")}
+                  >
+                    OpenRouter
+                  </Button>
+                </div>
+                <p className="text-xs text-slate-400">
+                  选择 DeepSeek 或填中转站 Base URL，再填对应的 API Key 即可。模型名可在进入后设置。
+                </p>
+              </div>
             </motion.form>
             <p className="mt-3 text-xs text-slate-400">
               {activeSource?.provider === "gemini" ? (
@@ -285,7 +302,6 @@ export default function InitPage() {
             href="https://github.com/cubewhy/skid-homework"
             className="underline"
           >
-            {/* {t("footer.source")} */}
             https://github.com/cubewhy/skid-homework
           </a>
         </div>
