@@ -12,6 +12,7 @@ import { DEFAULT_BASE_BY_PROVIDER } from "./SettingsPage";
 import { useMemo, useState } from "react";
 import {
   AiSource,
+  DEFAULT_DEEPSEEK_BASE_URL,
   DEFAULT_OPENAI_BASE_URL,
   useAiStore,
 } from "@/store/ai-store";
@@ -34,6 +35,7 @@ import {
 
 const PRESET_URLS: Record<string, string> = {
   openai: DEFAULT_OPENAI_BASE_URL,
+  deepseek: DEFAULT_DEEPSEEK_BASE_URL,
   openrouter: "https://openrouter.ai/api/v1",
 };
 
@@ -204,7 +206,9 @@ export default function AIAPICredentialsManager({
                       if (presetUrl) {
                         setLocalBaseUrl(presetUrl);
                         updateSource(activeSource.id, { baseUrl: presetUrl });
-                        if (val === "openrouter") {
+                        if (val === "deepseek") {
+                          toast.success("已切换到 DeepSeek");
+                        } else if (val === "openrouter") {
                           toast.success(
                             t("api-credentials.advanced.switched-openrouter"),
                           );
@@ -227,6 +231,7 @@ export default function AIAPICredentialsManager({
                       <SelectItem value="openai">
                         {t("api-credentials.advanced.openai-default")}
                       </SelectItem>
+                      <SelectItem value="deepseek">DeepSeek</SelectItem>
                       <SelectItem value="openrouter">
                         {t("api-credentials.advanced.openrouter")}
                       </SelectItem>
